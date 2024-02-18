@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Vocabularly",
+  "version": "1.0",
+  "description": "This extension will help you to save and learn new english words",
+  "icons": {
+    "32": "vocabulary.png"
+  },
+  "permissions": ["scripting", "storage", "activeTab"],
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "vocabulary.png"
+  },
+  "host_permissions": ["https://*/*", "http://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
