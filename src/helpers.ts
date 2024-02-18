@@ -22,3 +22,12 @@ export const getDefinition = async (word: string) => {
   );
   return definition;
 };
+
+export const createOrUpdateObject = (
+  key: string,
+  newData: CleanWordDefinition[]
+) => {
+  chrome.storage.local.set({ [key]: newData }, function () {
+    console.log(`Object with key '${key}' updated in local storage`);
+  });
+};

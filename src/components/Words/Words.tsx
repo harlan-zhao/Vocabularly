@@ -1,14 +1,27 @@
 import './Words.css';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
 import { CleanWordDefinition } from 'src/types';
-import { getDefinition, cleanDefinitionData } from 'src/helpers';
+import { localStorageWordsKey } from 'src/constants';
+import {
+  getDefinition,
+  cleanDefinitionData,
+  createOrUpdateObject,
+} from 'src/helpers';
 
 const Words = () => {
   const wordInput = useRef<HTMLInputElement>(null);
   const [wordsWithDefinitions, setWordsWithDefinitions] = useState<
     CleanWordDefinition[]
   >([]);
+  console.log(chrome.storage);
+  useEffect(() => {
+    chrome.storage.local.get(localStorageWordsKey, function (result) {
+      if (result && result[localStorageWordsKey]) {
+        setWordsWithDefinitions(result[localStorageWordsKey]);
+      }
+    });
+  }, [setWordsWithDefinitions]);
 
   const getWordDefinition = async () => {
     const word = wordInput.current?.value;
@@ -20,9 +33,11 @@ const Words = () => {
     if (!cleanedDefinitionData) {
       return;
     }
+    const newList = [...wordsWithDefinitions, cleanedDefinitionData];
     setWordsWithDefinitions((prev) => {
       return [...prev, cleanedDefinitionData];
     });
+    createOrUpdateObject(localStorageWordsKey, newList);
   };
 
   return (

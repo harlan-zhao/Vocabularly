@@ -14,3 +14,6 @@ export const defaultTab = 'words';
 
 export const freeDictionaryApiUrl =
   'https://api.dictionaryapi.dev/api/v2/entries/en/';
+
+export const localStorageWordsKey = 'wordsList';
+export const localStorageMsteredWordsKey = 'wordsMasteredList';
