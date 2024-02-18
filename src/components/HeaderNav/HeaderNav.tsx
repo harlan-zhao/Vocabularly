@@ -1,19 +1,30 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HeaderNav.css';
 import logo from '../../../public/logo.png';
 import { tabs } from '../../constants';
 
-const HeaderNav = () => {
-  const [activeTab, setActiveTab] = useState(tabs[0].path);
+const HeaderNav = ({
+  currentTab,
+  setCurrentTab,
+}: {
+  currentTab: string;
+  setCurrentTab: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const [underlineStyle, setUnderlineStyle] = useState({});
 
-  const TabItem = ({ tab }: { tab: { displayName: string; path: string } }) => {
+  const TabItem = ({
+    tabName,
+    tabDisplayName,
+  }: {
+    tabName: string;
+    tabDisplayName: string;
+  }) => {
     return (
       <div
-        className={`tab-item ${activeTab === tab.path ? 'active' : ''}`}
-        onClick={() => setActiveTab(tab.path)}
+        className={`tab-item ${currentTab === tabName ? 'active' : ''}`}
+        onClick={() => setCurrentTab(tabName)}
       >
-        {tab.displayName}
+        {tabDisplayName}
       </div>
     );
   };
@@ -30,14 +41,14 @@ const HeaderNav = () => {
       width: `${width}px`,
       transform: `translateX(${left}px)`,
     });
-  }, [activeTab]);
+  }, [currentTab]);
 
   return (
     <div className="header">
       <img src={logo} className="logo" alt="Vocabularly logo" />
       <div className="navbar">
-        {tabs.map((tab, index) => (
-          <TabItem key={index} tab={tab} />
+        {Array.from(tabs.entries()).map((tab, index) => (
+          <TabItem key={index} tabName={tab[0]} tabDisplayName={tab[1]} />
         ))}
         <div className="underline" style={underlineStyle}></div>
       </div>

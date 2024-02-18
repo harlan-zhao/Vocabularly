@@ -1,9 +1,31 @@
 #root {
-  width: 382px;
-  height: 500px;
+  width: 400px;
+  height: 590px;
   margin: 0 auto;
   border: solid rgb(213, 209, 209) 1px;
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-direction: column;
+}
+
+/* Targeting scrollbar in WebKit-based browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+/* Track (the area where the scrollbar moves) */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Set the background color of the track */
+}
+
+/* Handle (the draggable part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: #bbb; /* Set the color of the handle */
+  border-radius: 5px; /* Round the corners of the handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999; /* Change the color of the handle on hover */
 }
