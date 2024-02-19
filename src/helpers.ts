@@ -1,6 +1,5 @@
 import { get } from 'lodash';
 import { CleanWordDefinition } from './types';
-import { freeDictionaryApiUrl } from './constants';
 
 export const cleanDefinitionData = (definition: any) => {
   const dataToBeCleaned = definition[0];
@@ -13,21 +12,22 @@ export const cleanDefinitionData = (definition: any) => {
     meanings: get(dataToBeCleaned, 'meanings', []),
     phonetics: get(dataToBeCleaned, 'phonetics', []),
     sourceUrl: get(dataToBeCleaned, 'sourceUrls[0]', ''),
+    mastered: false,
   } as CleanWordDefinition;
 };
 
-export const getDefinition = async (word: string) => {
-  const definition = await fetch(`${freeDictionaryApiUrl}${word}`).then(
-    (response) => response.json()
-  );
-  return definition;
-};
+export const getValidPronounciation = (definition: CleanWordDefinition) => {
+  let audioUrl = get(definition, 'phonetics.[0].audio', '');
+  let phoneticString = get(definition, 'phonetics.[0].text', '');
 
-export const createOrUpdateObject = (
-  key: string,
-  newData: CleanWordDefinition[]
-) => {
-  chrome.storage.local.set({ [key]: newData }, function () {
-    console.log(`Object with key '${key}' updated in local storage`);
-  });
+  for (let i = 1; i < definition.phonetics.length; i++) {
+    const currentAudioUrl = get(definition, `phonetics.[${i}].audio`, '');
+    const currentPhoneticString = get(definition, `phonetics.[${i}].text`, '');
+    if (currentAudioUrl && currentPhoneticString) {
+      audioUrl = currentAudioUrl;
+      phoneticString = currentPhoneticString;
+      break;
+    }
+  }
+  return { audioUrl, phoneticString };
 };

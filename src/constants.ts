@@ -15,5 +15,8 @@ export const defaultTab = 'words';
 export const freeDictionaryApiUrl =
   'https://api.dictionaryapi.dev/api/v2/entries/en/';
 
-export const localStorageWordsKey = 'wordsList';
-export const localStorageMsteredWordsKey = 'wordsMasteredList';
+export const localStorageSavedWordsKey = 'wordsList';
+export const localStorageMsteredWordsKey = 'masteredwordsList';
+
+export const maxEntriesPerWordCardWhenExpanded = 3;
+export const maxEntriesPerWordCardWhenCollapsed = 1;

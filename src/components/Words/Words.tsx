@@ -1,27 +1,17 @@
 import './Words.css';
 import { useRef, useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
-import { CleanWordDefinition } from 'src/types';
-import { localStorageWordsKey } from 'src/constants';
-import {
-  getDefinition,
-  cleanDefinitionData,
-  createOrUpdateObject,
-} from 'src/helpers';
+import { LocalStorageData } from 'src/types';
+import { cleanDefinitionData } from 'src/helpers';
+import { createOrUpdateSavedWords, getDefinition } from 'src/services';
 
 const Words = () => {
   const wordInput = useRef<HTMLInputElement>(null);
-  const [wordsWithDefinitions, setWordsWithDefinitions] = useState<
-    CleanWordDefinition[]
-  >([]);
-  console.log(chrome.storage);
-  useEffect(() => {
-    chrome.storage.local.get(localStorageWordsKey, function (result) {
-      if (result && result[localStorageWordsKey]) {
-        setWordsWithDefinitions(result[localStorageWordsKey]);
-      }
-    });
-  }, [setWordsWithDefinitions]);
+  const [wordsWithDefinitionsMap, setWordsWithDefinitionsMap] =
+    useState<LocalStorageData>(new Map());
+  const [wordsMarkedAsMastered, setWordsMarkedAsMastered] = useState<
+    Map<string, boolean>
+  >(new Map());
 
   const getWordDefinition = async () => {
     const word = wordInput.current?.value;
@@ -33,11 +23,31 @@ const Words = () => {
     if (!cleanedDefinitionData) {
       return;
     }
-    const newList = [...wordsWithDefinitions, cleanedDefinitionData];
-    setWordsWithDefinitions((prev) => {
-      return [...prev, cleanedDefinitionData];
+    // const newList = [...wordsWithDefinitions, cleanedDefinitionData];
+    setWordsWithDefinitionsMap((prevMap) => {
+      const newMap = new Map(prevMap);
+      newMap.set(word, cleanedDefinitionData);
+      return newMap;
     });
-    createOrUpdateObject(localStorageWordsKey, newList);
+
+    // createOrUpdateObject(localStorageWordsKey, newList);
+  };
+
+  const onMasterOrUnMasterWord = (word: string) => {
+    if (wordsMarkedAsMastered.get(word)) {
+      setWordsMarkedAsMastered((prev) => {
+        const newMap = new Map(prev);
+        newMap.delete(word);
+        return newMap;
+      });
+    } else {
+      setWordsMarkedAsMastered((prev) => {
+        const newMap = new Map(prev);
+        newMap.set(word, true);
+        return newMap;
+      });
+    }
+    return;
   };
 
   return (
@@ -48,9 +58,16 @@ const Words = () => {
           Get Word
         </button>
       </div>
-      {wordsWithDefinitions.map((definition, index) => (
-        <WordCard key={index} definition={definition} />
-      ))}
+      {Array.from(wordsWithDefinitionsMap.values())
+        .reverse()
+        .map((definition, index) => (
+          <WordCard
+            key={index}
+            definition={definition}
+            isMastered={wordsMarkedAsMastered.get(definition.word) || false}
+            onMasterOrUnMasterWord={onMasterOrUnMasterWord}
+          />
+        ))}
     </div>
   );
 };

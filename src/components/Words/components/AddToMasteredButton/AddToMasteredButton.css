@@ -1,0 +1,28 @@
+.wrapper {
+  width: 16px;
+  cursor: pointer;
+  margin: 0.5rem 0;
+}
+
+.checkmark {
+  stroke: rgb(101, 100, 100);
+  stroke-dashoffset: 0;
+  stroke-dasharray: 745.74853515625;
+}
+
+.checkmark.isMastered {
+  stroke: #1fa975;
+}
+
+/* .checkmark.isMastered.showAnimation {
+  animation: dash 2s ease-out forwards;
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 745.74853515625;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+} */

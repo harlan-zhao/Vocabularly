@@ -1,3 +1,8 @@
+import {
+  localStorageSavedWordsKey,
+  localStorageMsteredWordsKey,
+} from './constants';
+
 type Definition = {
   definition: string;
   example?: string;
@@ -18,4 +23,11 @@ export type CleanWordDefinition = {
   meanings: Meaning[];
   phonetics: Phonetic[];
   sourceUrl: string;
+  mastered: boolean;
 };
+
+export type LocalStorageData = Map<string, CleanWordDefinition>;
+
+export type localStorageKeyType =
+  | typeof localStorageSavedWordsKey
+  | typeof localStorageMsteredWordsKey;

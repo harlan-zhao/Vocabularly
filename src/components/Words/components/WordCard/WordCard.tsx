@@ -1,60 +1,103 @@
 import './WordCard.css';
-import { useState } from 'react';
-import { isEmpty } from 'lodash';
+import { useState, useRef } from 'react';
 import { CleanWordDefinition } from 'src/types';
+import {
+  maxEntriesPerWordCardWhenExpanded,
+  maxEntriesPerWordCardWhenCollapsed,
+} from 'src/constants';
+import Tooltip from 'src/components/ToolTip/ToolTip';
+import AddToMasteredButton from '../AddToMasteredButton/AddToMasteredButton';
+import { getValidPronounciation } from 'src/helpers';
+import volumnIcon from 'src/assets/volume-high-outline.svg';
 
-const WordCard = ({ definition }: { definition: CleanWordDefinition }) => {
+const WordCard = ({
+  definition,
+  isMastered,
+  onMasterOrUnMasterWord,
+}: {
+  definition: CleanWordDefinition;
+  isMastered: boolean;
+  onMasterOrUnMasterWord: (word: string) => void;
+}) => {
   const [showMore, setShowMore] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const { audioUrl, phoneticString } = getValidPronounciation(definition);
+
   if (!definition) {
     return null;
   }
 
-  const firstDefinition = definition.meanings[0] || [];
-  const secondDefinition = definition.meanings[1] || [];
+  const playAudio = () => {
+    if (!audioRef.current || !audioUrl) {
+      return;
+    }
+    audioRef.current.play();
+  };
 
   return (
     <div className="wordCard">
-      <span className="word" onClick={() => setShowMore((prev) => !prev)}>
-        {definition.word}
-      </span>
-      <div className="definitions">
-        {firstDefinition.partOfSpeech && (
-          <span className="partOfSpeech">{firstDefinition.partOfSpeech}</span>
+      <div className="wordTitleSection">
+        <Tooltip
+          text={
+            !isMastered ? 'Mark word as mastered' : 'Mark word as un-mastered'
+          }
+        >
+          <AddToMasteredButton
+            isMastered={isMastered}
+            onClick={() => onMasterOrUnMasterWord(definition.word)}
+          />
+        </Tooltip>
+
+        <span className="word" onClick={() => setShowMore((prev) => !prev)}>
+          {definition.word}
+        </span>
+        {phoneticString && (
+          <>
+            <div
+              className={`phonetics ${!audioUrl && 'noAudio'}`}
+              onClick={playAudio}
+            >
+              <img
+                className="volumnIcon"
+                src={volumnIcon}
+                alt="icon"
+                width="12"
+                height="12"
+              />
+              <span className="phoneticString">{phoneticString}</span>
+            </div>
+            <audio ref={audioRef} src={audioUrl} />
+          </>
         )}
-        {firstDefinition.definitions?.map((definition, index) => {
-          if (!showMore && index > 1) {
-            return null;
-          }
-          if (showMore && index > 3) {
-            return null;
-          }
+      </div>
+
+      <div className="definitions">
+        {definition.meanings?.map((meaning, index) => {
           return (
-            <span key={index} className="definitionText">
-              {definition.definition}
-            </span>
+            <>
+              <span
+                key={index}
+                className="partOfSpeech"
+                title={meaning.partOfSpeech}
+              >
+                {meaning.partOfSpeech}
+              </span>
+              {meaning.definitions?.map((definition, index) => {
+                if (!showMore && index >= maxEntriesPerWordCardWhenCollapsed) {
+                  return null;
+                }
+                if (showMore && index >= maxEntriesPerWordCardWhenExpanded) {
+                  return null;
+                }
+                return (
+                  <span key={index} className="definitionText">
+                    {definition.definition}
+                  </span>
+                );
+              })}
+            </>
           );
         })}
-        {showMore &&
-          !isEmpty(secondDefinition) &&
-          secondDefinition.partOfSpeech && (
-            <span className="partOfSpeech secondPart">
-              {secondDefinition.partOfSpeech}
-            </span>
-          )}
-        {showMore &&
-          secondDefinition.definitions?.map((definition, index) => {
-            if (!showMore && index > 1) {
-              return null;
-            }
-            if (showMore && index > 3) {
-              return null;
-            }
-            return (
-              <span key={index} className="definitionText">
-                {definition.definition}
-              </span>
-            );
-          })}
       </div>
     </div>
   );
