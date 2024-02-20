@@ -1,17 +1,50 @@
 import './Words.css';
 import { useRef, useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
-import { LocalStorageData } from 'src/types';
+import { LocalStorageData, TabType } from 'src/types';
 import { cleanDefinitionData } from 'src/helpers';
-import { createOrUpdateSavedWords, getDefinition } from 'src/services';
+import {
+  localStorageSavedWordsKey,
+  localStorageMsteredWordsKey,
+  Tabs,
+} from 'src/constants';
+import {
+  createOrUpdateSavedWords,
+  getDefinition,
+  getSavedWords,
+  moveItemFromOrToMasteredMap,
+} from 'src/services';
 
-const Words = () => {
+const Words = ({ currentTab }: { currentTab: TabType }) => {
   const wordInput = useRef<HTMLInputElement>(null);
   const [wordsWithDefinitionsMap, setWordsWithDefinitionsMap] =
-    useState<LocalStorageData>(new Map());
+    useState<LocalStorageData>({});
+  const [masteredWordsWithDefinitionsMap, setMasteredWordsWithDefinitionsMap] =
+    useState<LocalStorageData>({});
   const [wordsMarkedAsMastered, setWordsMarkedAsMastered] = useState<
     Map<string, boolean>
   >(new Map());
+  const isOnNewWordsPage = currentTab === Tabs.words;
+  const isOnMasteredWordsPage = currentTab === Tabs.mastered;
+  const currentPageItems = isOnMasteredWordsPage
+    ? Object.values(masteredWordsWithDefinitionsMap)
+    : Object.values(wordsWithDefinitionsMap);
+
+  useEffect(() => {
+    const getWords = async () => {
+      if (isOnMasteredWordsPage) {
+        const masteredWords = await getSavedWords(localStorageMsteredWordsKey);
+        setWordsMarkedAsMastered(
+          new Map(Object.keys(masteredWords).map((word) => [word, true]))
+        );
+        setMasteredWordsWithDefinitionsMap(masteredWords);
+      } else {
+        const words = await getSavedWords(localStorageSavedWordsKey);
+        setWordsWithDefinitionsMap(words);
+      }
+    };
+    getWords();
+  }, [isOnMasteredWordsPage]);
 
   const getWordDefinition = async () => {
     const word = wordInput.current?.value;
@@ -23,14 +56,13 @@ const Words = () => {
     if (!cleanedDefinitionData) {
       return;
     }
-    // const newList = [...wordsWithDefinitions, cleanedDefinitionData];
-    setWordsWithDefinitionsMap((prevMap) => {
-      const newMap = new Map(prevMap);
-      newMap.set(word, cleanedDefinitionData);
-      return newMap;
-    });
 
-    // createOrUpdateObject(localStorageWordsKey, newList);
+    setWordsWithDefinitionsMap((prevMap) => {
+      const newData = { ...prevMap };
+      newData[word] = cleanedDefinitionData;
+      return newData;
+    });
+    createOrUpdateSavedWords(cleanedDefinitionData);
   };
 
   const onMasterOrUnMasterWord = (word: string) => {
@@ -40,30 +72,44 @@ const Words = () => {
         newMap.delete(word);
         return newMap;
       });
+      moveItemFromOrToMasteredMap(
+        localStorageMsteredWordsKey,
+        localStorageSavedWordsKey,
+        word
+      );
     } else {
       setWordsMarkedAsMastered((prev) => {
         const newMap = new Map(prev);
         newMap.set(word, true);
         return newMap;
       });
+      moveItemFromOrToMasteredMap(
+        localStorageSavedWordsKey,
+        localStorageMsteredWordsKey,
+        word
+      );
     }
     return;
   };
 
   return (
     <div className="wordsSection">
-      <div className="test">
-        <input className="wordInput" ref={wordInput} />
-        <button className="addWordButton" onClick={getWordDefinition}>
-          Get Word
-        </button>
-      </div>
-      {Array.from(wordsWithDefinitionsMap.values())
+      {isOnNewWordsPage && (
+        <div className="test">
+          <input className="wordInput" ref={wordInput} />
+          <button className="addWordButton" onClick={getWordDefinition}>
+            Get Word
+          </button>
+        </div>
+      )}
+
+      {Array.from(currentPageItems)
         .reverse()
         .map((definition, index) => (
           <WordCard
             key={index}
             definition={definition}
+            isLastItem={index === currentPageItems.length - 1}
             isMastered={wordsMarkedAsMastered.get(definition.word) || false}
             onMasterOrUnMasterWord={onMasterOrUnMasterWord}
           />

@@ -17,6 +17,10 @@
   background-color: rgb(216, 215, 215);
 }
 
+.wordCard.lastItem::after {
+  display: none;
+}
+
 .word {
   font-size: 1.2rem;
   font-weight: 500;
@@ -41,7 +45,7 @@
 
 .phonetics {
   height: 2rem;
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   font-size: 0.75rem;
   width: 100%;
   cursor: pointer;
@@ -51,11 +55,8 @@
 
 .phoneticString {
   margin-left: 0.5rem;
+  margin-bottom: 0.15rem;
   font-weight: 600;
-}
-
-.volumnIcon {
-  margin-top: 0.2rem;
 }
 
 .phonetics.noAudio {

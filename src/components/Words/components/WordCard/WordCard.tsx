@@ -14,10 +14,12 @@ const WordCard = ({
   definition,
   isMastered,
   onMasterOrUnMasterWord,
+  isLastItem,
 }: {
   definition: CleanWordDefinition;
   isMastered: boolean;
   onMasterOrUnMasterWord: (word: string) => void;
+  isLastItem: boolean;
 }) => {
   const [showMore, setShowMore] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -35,7 +37,7 @@ const WordCard = ({
   };
 
   return (
-    <div className="wordCard">
+    <div className={`wordCard ${isLastItem && 'lastItem'}`}>
       <div className="wordTitleSection">
         <Tooltip
           text={
@@ -57,13 +59,7 @@ const WordCard = ({
               className={`phonetics ${!audioUrl && 'noAudio'}`}
               onClick={playAudio}
             >
-              <img
-                className="volumnIcon"
-                src={volumnIcon}
-                alt="icon"
-                width="12"
-                height="12"
-              />
+              <img src={volumnIcon} alt="icon" width="12" height="12" />
               <span className="phoneticString">{phoneticString}</span>
             </div>
             <audio ref={audioRef} src={audioUrl} />

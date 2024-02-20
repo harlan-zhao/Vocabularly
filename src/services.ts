@@ -1,4 +1,8 @@
-import { freeDictionaryApiUrl } from './constants';
+import {
+  freeDictionaryApiUrl,
+  localStorageSavedWordsKey,
+  localStorageMsteredWordsKey,
+} from './constants';
 import {
   CleanWordDefinition,
   LocalStorageData,
@@ -12,15 +16,6 @@ export const getDefinition = async (word: string) => {
   return definition;
 };
 
-export const createOrUpdateSavedWords = async (
-  key: localStorageKeyType,
-  newItem: CleanWordDefinition
-) => {
-  const localStorageData = await getSavedWords(key);
-  localStorageData.set(key, newItem);
-  chrome.storage.local.set({ [key]: localStorageData });
-};
-
 export const getSavedWords = (
   key: localStorageKeyType
 ): Promise<LocalStorageData> => {
@@ -29,14 +24,50 @@ export const getSavedWords = (
       if (result && result[key]) {
         resolve(result[key] as LocalStorageData);
       } else {
-        resolve(new Map() as LocalStorageData);
+        resolve({} as LocalStorageData);
       }
     });
   });
 };
 
+export const createOrUpdateSavedWords = async (
+  newItem: CleanWordDefinition
+) => {
+  const localStorageData = await getSavedWords(localStorageSavedWordsKey);
+  const masteredStorageData = await getSavedWords(localStorageMsteredWordsKey);
+  if (masteredStorageData[newItem.word] || localStorageData[newItem.word]) {
+    return;
+  }
+  localStorageData[newItem.word] = newItem;
+  chrome.storage.local.set({ [localStorageSavedWordsKey]: localStorageData });
+};
+
 export const deleteFromSavedWords = async (key: localStorageKeyType) => {
   const localStorageData = await getSavedWords(key);
-  localStorageData.delete(key);
+  delete localStorageData[key];
   chrome.storage.local.set({ [key]: localStorageData });
+};
+
+export const moveItemFromOrToMasteredMap = async (
+  fromKey: localStorageKeyType,
+  toKey: localStorageKeyType,
+  wordName: string
+) => {
+  try {
+    const fromLocalStorageData = await getSavedWords(fromKey);
+    const toLocalStorageData = await getSavedWords(toKey);
+
+    const wordDefinition = fromLocalStorageData[wordName];
+    if (!wordDefinition) {
+      return;
+    }
+    delete fromLocalStorageData[wordName];
+    toLocalStorageData[wordName] = wordDefinition;
+    console.log(fromLocalStorageData, toLocalStorageData);
+    console.log(fromKey, toKey);
+    chrome.storage.local.set({ [fromKey]: fromLocalStorageData });
+    chrome.storage.local.set({ [toKey]: toLocalStorageData });
+  } catch (error) {
+    console.error(error);
+  }
 };

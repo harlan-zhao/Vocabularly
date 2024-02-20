@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './HeaderNav.css';
 import logo from '../../../public/logo.png';
-import { tabs } from '../../constants';
+import { TabType } from '../../types';
+import { TabsList } from '../../constants';
 
 const HeaderNav = ({
   currentTab,
   setCurrentTab,
 }: {
-  currentTab: string;
-  setCurrentTab: React.Dispatch<React.SetStateAction<string>>;
+  currentTab: TabType;
+  setCurrentTab: React.Dispatch<React.SetStateAction<TabType>>;
 }) => {
   const [underlineStyle, setUnderlineStyle] = useState({});
 
@@ -16,7 +17,7 @@ const HeaderNav = ({
     tabName,
     tabDisplayName,
   }: {
-    tabName: string;
+    tabName: TabType;
     tabDisplayName: string;
   }) => {
     return (
@@ -47,7 +48,7 @@ const HeaderNav = ({
     <div className="header">
       <img src={logo} className="logo" alt="Vocabularly logo" />
       <div className="navbar">
-        {Array.from(tabs.entries()).map((tab, index) => (
+        {Array.from(TabsList.entries()).map((tab, index) => (
           <TabItem key={index} tabName={tab[0]} tabDisplayName={tab[1]} />
         ))}
         <div className="underline" style={underlineStyle}></div>

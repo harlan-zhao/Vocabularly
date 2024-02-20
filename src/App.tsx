@@ -2,14 +2,17 @@ import './App.css';
 import { useState } from 'react';
 import HeaderNav from './components/HeaderNav/HeaderNav';
 import Words from './components/Words/Words';
-import { defaultTab } from './constants';
+import { TabType } from './types';
+import { Tabs } from './constants';
 
 function App() {
-  const [currentTab, setCurrentTab] = useState(defaultTab);
+  const [currentTab, setCurrentTab] = useState<TabType>(Tabs.words);
+  const onWordsPage = currentTab === Tabs.words || currentTab === Tabs.mastered;
+
   return (
     <>
       <HeaderNav currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      <Words />
+      {onWordsPage && <Words currentTab={currentTab} />}
     </>
   );
 }
