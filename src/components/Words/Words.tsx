@@ -15,7 +15,15 @@ import {
   moveItemFromOrToMasteredMap,
 } from 'src/services';
 
-const Words = ({ currentTab }: { currentTab: TabType }) => {
+const Words = ({
+  currentTab,
+  setWordsCount,
+}: {
+  currentTab: TabType;
+  setWordsCount: React.Dispatch<
+    React.SetStateAction<{ [Tabs.words]: number; [Tabs.mastered]: number }>
+  >;
+}) => {
   const wordInput = useRef<HTMLInputElement>(null);
   const [wordsWithDefinitionsMap, setWordsWithDefinitionsMap] =
     useState<LocalStorageData>({});
@@ -45,6 +53,13 @@ const Words = ({ currentTab }: { currentTab: TabType }) => {
     };
     getWords();
   }, [isOnMasteredWordsPage]);
+
+  useEffect(() => {
+    setWordsCount({
+      [Tabs.words]: Object.keys(wordsWithDefinitionsMap).length,
+      [Tabs.mastered]: Object.keys(masteredWordsWithDefinitionsMap).length,
+    });
+  }, [wordsWithDefinitionsMap, masteredWordsWithDefinitionsMap, setWordsCount]);
 
   const getWordDefinition = async () => {
     const word = wordInput.current?.value;
@@ -95,7 +110,7 @@ const Words = ({ currentTab }: { currentTab: TabType }) => {
   return (
     <div className="wordsSection">
       {isOnNewWordsPage && (
-        <div className="test">
+        <div className="wordButton">
           <input className="wordInput" ref={wordInput} />
           <button className="addWordButton" onClick={getWordDefinition}>
             Get Word

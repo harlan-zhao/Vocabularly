@@ -12,7 +12,6 @@ export const cleanDefinitionData = (definition: any) => {
     meanings: get(dataToBeCleaned, 'meanings', []),
     phonetics: get(dataToBeCleaned, 'phonetics', []),
     sourceUrl: get(dataToBeCleaned, 'sourceUrls[0]', ''),
-    mastered: false,
   } as CleanWordDefinition;
 };
 

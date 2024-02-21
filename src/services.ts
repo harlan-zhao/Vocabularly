@@ -63,8 +63,6 @@ export const moveItemFromOrToMasteredMap = async (
     }
     delete fromLocalStorageData[wordName];
     toLocalStorageData[wordName] = wordDefinition;
-    console.log(fromLocalStorageData, toLocalStorageData);
-    console.log(fromKey, toKey);
     chrome.storage.local.set({ [fromKey]: fromLocalStorageData });
     chrome.storage.local.set({ [toKey]: toLocalStorageData });
   } catch (error) {

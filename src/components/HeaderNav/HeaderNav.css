@@ -27,7 +27,7 @@
 .tab-item {
   font-size: 1.1rem;
   font-weight: 500;
-  width: 6rem;
+  min-width: 6rem;
   text-align: center;
   cursor: pointer;
   position: relative;

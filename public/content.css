@@ -1,0 +1,125 @@
+.window {
+  position: absolute;
+  min-width: 150px;
+  min-height: 150px;
+  max-width: 500px;
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: white;
+  padding: 1rem;
+  display: flex;
+  margin-top: 2rem;
+  margin-left: 2rem;
+  border: 1px solid rgb(222, 219, 219);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 9999;
+}
+
+.word {
+  font-size: 1.2rem;
+  font-weight: 500;
+  width: auto;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.word:hover {
+  color: #1fa975;
+}
+
+.wordTitleSection {
+  min-width: 12rem;
+  max-width: 20rem;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.phonetics {
+  height: 2rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.phoneticString {
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
+.phonetics.noAudio {
+  cursor: default;
+}
+
+.phonetics.noAudio:hover {
+  color: black;
+}
+
+.phonetics:hover {
+  color: #1fa975;
+}
+
+.definitions {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  padding-right: 0.2rem;
+  padding-left: 1rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.definitionText {
+  padding-right: 0.5rem;
+  margin-top: 0.25rem;
+  color: #363535;
+}
+
+.definitionText::before {
+  content: '.'; /* Unicode bullet point character */
+  margin-right: 5px; /* Adjust spacing between bullet point and text */
+}
+
+.partOfSpeech {
+  font-size: 1rem;
+  font-weight: 600;
+  color: black;
+}
+
+.definitions:hover > .definitionText {
+  color: black;
+}
+
+.secondPart {
+  margin-top: 1rem;
+}
+
+.bookmark {
+  cursor: pointer;
+}
+
+.saveButtonContainer {
+  display: flex;
+  margin-top: 0.5rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.saveText {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.saveText.saved {
+  color: #1fa975;
+}

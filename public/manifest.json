@@ -21,5 +21,16 @@
       "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content.css",
+        "volume-high-outline.svg",
+        "/assets/bookmark-outline.svg",
+        "/assets/bookmark-outline-success.svg"
+      ],
+      "matches": ["<all_urls>"]
+    }
   ]
 }
