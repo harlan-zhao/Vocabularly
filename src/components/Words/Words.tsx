@@ -1,12 +1,19 @@
 import './Words.css';
 import { useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
-import { LocalStorageData, TabType, SettingsData } from 'src/types';
+import {
+  LocalStorageData,
+  TabType,
+  SettingsData,
+  CleanWordDefinition,
+} from 'src/types';
 import EmptyState from './components/EmptyState/EmptyState';
 import {
   localStorageSavedWordsKey,
   localStorageMsteredWordsKey,
   Tabs,
+  sortKeys,
+  sortTypes,
 } from 'src/constants';
 import {
   getSavedWords,
@@ -30,6 +37,8 @@ const Words = ({
     useState<LocalStorageData>({});
   const [masteredWordsWithDefinitionsMap, setMasteredWordsWithDefinitionsMap] =
     useState<LocalStorageData>({});
+
+  const [itemsToShow, setItemsToShow] = useState<CleanWordDefinition[]>([]);
   const [wordsMarkedAsMastered, setWordsMarkedAsMastered] = useState<
     Map<string, boolean>
   >(new Map());
@@ -38,6 +47,31 @@ const Words = ({
     ? Object.values(masteredWordsWithDefinitionsMap)
     : Object.values(wordsWithDefinitionsMap);
   const isPageEmpty = currentPageItems.length === 0;
+
+  useEffect(() => {
+    let items = isOnMasteredWordsPage
+      ? Object.values(masteredWordsWithDefinitionsMap)
+      : Object.values(wordsWithDefinitionsMap);
+
+    if (settings.sortKey === sortKeys.date) {
+      items = items.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+    }
+    if (settings.sortKey === sortKeys.alpha) {
+      items = items.sort((a, b) => a.word.localeCompare(b.word));
+    }
+
+    if (settings.sortType === sortTypes.desc) {
+      items = items.reverse();
+    }
+    setItemsToShow(items);
+  }, [
+    currentTab,
+    masteredWordsWithDefinitionsMap,
+    wordsWithDefinitionsMap,
+    settings,
+  ]);
 
   useEffect(() => {
     const getWords = async () => {
@@ -104,18 +138,16 @@ const Words = ({
   return (
     <div className="wordsSection">
       {isPageEmpty && <EmptyState />}
-      {Array.from(currentPageItems)
-        .reverse()
-        .map((definition, index) => (
-          <WordCard
-            key={index}
-            definition={definition}
-            isLastItem={index === currentPageItems.length - 1}
-            isMastered={wordsMarkedAsMastered.get(definition.word) || false}
-            onMasterOrUnMasterWord={onMasterOrUnMasterWord}
-            onRemoveWord={onRemoveWord}
-          />
-        ))}
+      {Array.from(itemsToShow).map((definition, index) => (
+        <WordCard
+          key={index}
+          definition={definition}
+          isLastItem={index === currentPageItems.length - 1}
+          isMastered={wordsMarkedAsMastered.get(definition.word) || false}
+          onMasterOrUnMasterWord={onMasterOrUnMasterWord}
+          onRemoveWord={onRemoveWord}
+        />
+      ))}
     </div>
   );
 };

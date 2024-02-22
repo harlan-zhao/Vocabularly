@@ -302,7 +302,7 @@ const getSavedWords = (key) => {
 const saveWordToStorage = async (definition) => {
   const localStorageData = await getSavedWords('wordsList');
   localStorageData[definition.word] = {
-    definition,
+    ...definition,
     date: new Date().toISOString(),
   };
   chrome.storage.local.set({ wordsList: localStorageData });
