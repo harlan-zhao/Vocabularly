@@ -1,7 +1,7 @@
 import './Words.css';
 import { useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
-import { LocalStorageData, TabType } from 'src/types';
+import { LocalStorageData, TabType, SettingsData } from 'src/types';
 import EmptyState from './components/EmptyState/EmptyState';
 import {
   localStorageSavedWordsKey,
@@ -17,12 +17,15 @@ import {
 const Words = ({
   currentTab,
   setWordsCount,
+  settings,
 }: {
   currentTab: TabType;
   setWordsCount: React.Dispatch<
     React.SetStateAction<{ [Tabs.words]: number; [Tabs.mastered]: number }>
   >;
+  settings: SettingsData;
 }) => {
+  console.log(settings);
   const [wordsWithDefinitionsMap, setWordsWithDefinitionsMap] =
     useState<LocalStorageData>({});
   const [masteredWordsWithDefinitionsMap, setMasteredWordsWithDefinitionsMap] =

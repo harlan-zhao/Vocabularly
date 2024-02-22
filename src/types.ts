@@ -2,6 +2,8 @@ import {
   localStorageSavedWordsKey,
   localStorageMsteredWordsKey,
   Tabs,
+  sortKeys,
+  sortTypes,
 } from './constants';
 
 type Definition = {
@@ -24,10 +26,16 @@ export type CleanWordDefinition = {
   meanings: Meaning[];
   phonetics: Phonetic[];
   sourceUrl: string;
+  date: string;
 };
 
 export type LocalStorageData = {
   [key: string]: CleanWordDefinition;
+};
+
+export type SettingsData = {
+  sortKey: SortKeyType;
+  sortType: SortTypeType;
 };
 
 export type localStorageKeyType =
@@ -35,3 +43,6 @@ export type localStorageKeyType =
   | typeof localStorageMsteredWordsKey;
 
 export type TabType = keyof typeof Tabs;
+
+export type SortKeyType = keyof typeof sortKeys;
+export type SortTypeType = keyof typeof sortTypes;

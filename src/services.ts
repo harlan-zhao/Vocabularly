@@ -1,8 +1,11 @@
 import {
   localStorageSavedWordsKey,
   localStorageMsteredWordsKey,
+  settingsKey,
+  sortKeys,
+  sortTypes,
 } from './constants';
-import { LocalStorageData, localStorageKeyType } from './types';
+import { LocalStorageData, localStorageKeyType, SettingsData } from './types';
 
 export const getSavedWords = (
   key: localStorageKeyType
@@ -54,4 +57,23 @@ export const removeSavedWordFromStorage = (word: string): void => {
       chrome.storage.local.set({ [key]: newMap });
     });
   });
+};
+
+export const getSettings = (): Promise<SettingsData> => {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(settingsKey, function (result) {
+      if (result && result[settingsKey]) {
+        resolve(result[settingsKey] as SettingsData);
+      } else {
+        resolve({
+          sortKey: sortKeys.alpha,
+          sortType: sortTypes.asc,
+        } as SettingsData);
+      }
+    });
+  });
+};
+
+export const saveSettings = (newSettings: SettingsData): void => {
+  chrome.storage.local.set({ [settingsKey]: newSettings });
 };
