@@ -20,11 +20,18 @@ function createButton(rect) {
     button.remove();
   }
   button = document.createElement('button');
-  button.textContent = 'Open Window';
-  button.style.position = 'absolute';
-  button.style.left = `${rect.left + window.pageXOffset}px`;
+  button.classList.add('popUpButton');
+  button.style.left = `${rect.left + 32 + window.pageXOffset}px`;
   button.style.top = `${rect.top + window.pageYOffset}px`;
-  button.style.zIndex = '9999';
+
+  const pngButton = document.createElement('img');
+  pngButton.alt = 'icon';
+  pngButton.width = '24';
+  pngButton.height = '24';
+  pngButton.classList.add('vocabularyIcon');
+  button.appendChild(pngButton);
+  pngButton.src = chrome.runtime.getURL('/assets/vocabulary.png');
+
   button.onclick = () => {
     button.style.display = 'none';
     createWindow(rect);
@@ -57,7 +64,7 @@ async function createWindow(rect) {
   windowDiv.classList.add('window'); // Apply the CSS class
   windowDiv.style.userSelect = 'none';
   windowDiv.style.left = `${rect.left + window.pageXOffset}px`;
-  windowDiv.style.top = `${rect.bottom + window.pageYOffset}px`;
+  windowDiv.style.top = `${rect.bottom - 20 + window.pageYOffset}px`;
   windowDiv.onclick = (event) => {
     event.stopPropagation();
   };
@@ -70,7 +77,7 @@ async function createWindow(rect) {
 
   const { audioUrl, phoneticString } = getValidPronounciation(definition);
   const divWordTitleSection = document.createElement('div');
-  divWordTitleSection.classList.add('wordTitleSection');
+  divWordTitleSection.classList.add('wordTitleSectionOnPage');
 
   const spanWord = document.createElement('span');
   spanWord.classList.add('word');
@@ -81,16 +88,18 @@ async function createWindow(rect) {
   if (phoneticString) {
     const divPhonetics = document.createElement('div');
     if (audioUrl) {
-      divPhonetics.classList.add('phonetics');
+      divPhonetics.classList.add('phoneticsOnPage');
     }
     const imgVolumnIcon = document.createElement('img');
-    imgVolumnIcon.src = chrome.runtime.getURL('volume-high-outline.svg');
+    imgVolumnIcon.src = chrome.runtime.getURL(
+      '/assets/volume-high-outline.svg'
+    );
     imgVolumnIcon.alt = 'icon';
-    imgVolumnIcon.width = '12';
-    imgVolumnIcon.height = '12';
+    imgVolumnIcon.width = '14';
+    imgVolumnIcon.height = '14';
 
     const spanPhoneticString = document.createElement('span');
-    spanPhoneticString.classList.add('phoneticString');
+    spanPhoneticString.classList.add('phoneticStringOnPage');
     spanPhoneticString.textContent = phoneticString;
 
     const audioElement = document.createElement('audio');

@@ -7,6 +7,25 @@
   align-items: center;
 }
 
+/* on hover card effect for wordCard */
+.wordCard:hover {
+  background-color: #fffefe;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem 0.1rem rgba(219, 217, 217, 0.1);
+  transition: all 0.3s ease;
+  transform: scale(1.01);
+}
+
+.wordCard:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  width: 80%;
+  height: 1px;
+  background-color: rgb(216, 215, 215);
+}
+
 .wordCard::after {
   content: '';
   position: absolute;
@@ -108,4 +127,41 @@
 
 .secondPart {
   margin-top: 1rem;
+}
+
+.deleteWrapper {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+}
+
+.removeIcon {
+  width: 1.2rem;
+  margin-left: 0.2rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.wordCard:hover .removeIcon {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.removeText {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #ff9770;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.removeIcon:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.deleteWrapper:hover .removeText {
+  opacity: 1;
 }

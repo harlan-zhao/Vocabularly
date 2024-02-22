@@ -69,3 +69,13 @@ export const moveItemFromOrToMasteredMap = async (
     console.error(error);
   }
 };
+
+export const removeSavedWordFromStorage = (word: string): void => {
+  [localStorageSavedWordsKey, localStorageMsteredWordsKey].forEach((key) => {
+    getSavedWords(key as localStorageKeyType).then((result) => {
+      const newMap = { ...result };
+      delete newMap[word];
+      chrome.storage.local.set({ [key]: newMap });
+    });
+  });
+};

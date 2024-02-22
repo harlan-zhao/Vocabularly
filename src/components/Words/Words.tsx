@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
 import { LocalStorageData, TabType } from 'src/types';
 import { cleanDefinitionData } from 'src/helpers';
+import EmptyState from './components/EmptyState/EmptyState';
 import {
   localStorageSavedWordsKey,
   localStorageMsteredWordsKey,
@@ -13,6 +14,7 @@ import {
   getDefinition,
   getSavedWords,
   moveItemFromOrToMasteredMap,
+  removeSavedWordFromStorage,
 } from 'src/services';
 
 const Words = ({
@@ -37,22 +39,21 @@ const Words = ({
   const currentPageItems = isOnMasteredWordsPage
     ? Object.values(masteredWordsWithDefinitionsMap)
     : Object.values(wordsWithDefinitionsMap);
+  const isPageEmpty = currentPageItems.length === 0;
 
   useEffect(() => {
     const getWords = async () => {
-      if (isOnMasteredWordsPage) {
-        const masteredWords = await getSavedWords(localStorageMsteredWordsKey);
-        setWordsMarkedAsMastered(
-          new Map(Object.keys(masteredWords).map((word) => [word, true]))
-        );
-        setMasteredWordsWithDefinitionsMap(masteredWords);
-      } else {
-        const words = await getSavedWords(localStorageSavedWordsKey);
-        setWordsWithDefinitionsMap(words);
-      }
+      const masteredWords = await getSavedWords(localStorageMsteredWordsKey);
+      setWordsMarkedAsMastered(
+        new Map(Object.keys(masteredWords).map((word) => [word, true]))
+      );
+      setMasteredWordsWithDefinitionsMap(masteredWords);
+
+      const words = await getSavedWords(localStorageSavedWordsKey);
+      setWordsWithDefinitionsMap(words);
     };
     getWords();
-  }, [isOnMasteredWordsPage]);
+  }, [currentTab]);
 
   useEffect(() => {
     setWordsCount({
@@ -78,6 +79,20 @@ const Words = ({
       return newData;
     });
     createOrUpdateSavedWords(cleanedDefinitionData);
+  };
+
+  const onRemoveWord = (word: string) => {
+    setWordsWithDefinitionsMap((prev) => {
+      const newMap = { ...prev };
+      delete newMap[word];
+      return newMap;
+    });
+    setMasteredWordsWithDefinitionsMap((prev) => {
+      const newMap = { ...prev };
+      delete newMap[word];
+      return newMap;
+    });
+    removeSavedWordFromStorage(word);
   };
 
   const onMasterOrUnMasterWord = (word: string) => {
@@ -117,6 +132,7 @@ const Words = ({
           </button>
         </div>
       )}
+      {isPageEmpty && <EmptyState />}
 
       {Array.from(currentPageItems)
         .reverse()
@@ -127,6 +143,7 @@ const Words = ({
             isLastItem={index === currentPageItems.length - 1}
             isMastered={wordsMarkedAsMastered.get(definition.word) || false}
             onMasterOrUnMasterWord={onMasterOrUnMasterWord}
+            onRemoveWord={onRemoveWord}
           />
         ))}
     </div>

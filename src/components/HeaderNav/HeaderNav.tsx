@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './HeaderNav.css';
-import logo from '../../../public/logo.png';
+import logo from 'src/assets/logo.png';
 import { TabType } from '../../types';
 import { TabsList, Tabs } from '../../constants';
 

@@ -9,17 +9,20 @@ import Tooltip from 'src/components/ToolTip/ToolTip';
 import AddToMasteredButton from '../AddToMasteredButton/AddToMasteredButton';
 import { getValidPronounciation } from 'src/helpers';
 import volumnIcon from 'src/assets/volume-high-outline.svg';
+import RemoveIcon from 'src/assets/remove-circle-outline.svg';
 
 const WordCard = ({
   definition,
   isMastered,
   onMasterOrUnMasterWord,
   isLastItem,
+  onRemoveWord,
 }: {
   definition: CleanWordDefinition;
   isMastered: boolean;
   onMasterOrUnMasterWord: (word: string) => void;
   isLastItem: boolean;
+  onRemoveWord: (word: string) => void;
 }) => {
   const [showMore, setShowMore] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -38,6 +41,16 @@ const WordCard = ({
 
   return (
     <div className={`wordCard ${isLastItem && 'lastItem'}`}>
+      <div className="deleteWrapper">
+        <span className="removeText">Remove</span>
+        <img
+          src={RemoveIcon}
+          alt="remove"
+          className="removeIcon"
+          onClick={() => onRemoveWord(definition.word)}
+        />
+      </div>
+
       <div className="wordTitleSection">
         <Tooltip
           text={
