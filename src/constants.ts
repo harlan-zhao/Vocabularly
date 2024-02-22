@@ -10,9 +10,6 @@ export const TabsList: ReadonlyMap<keyof typeof Tabs, string> = new Map([
   [Tabs.export, 'Export'],
 ]);
 
-export const freeDictionaryApiUrl =
-  'https://api.dictionaryapi.dev/api/v2/entries/en/';
-
 export const localStorageSavedWordsKey = 'wordsList';
 export const localStorageMsteredWordsKey = 'masteredwordsList';
 

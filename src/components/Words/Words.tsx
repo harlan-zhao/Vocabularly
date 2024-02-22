@@ -1,8 +1,7 @@
 import './Words.css';
-import { useRef, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import WordCard from './components/WordCard/WordCard';
 import { LocalStorageData, TabType } from 'src/types';
-import { cleanDefinitionData } from 'src/helpers';
 import EmptyState from './components/EmptyState/EmptyState';
 import {
   localStorageSavedWordsKey,
@@ -10,8 +9,6 @@ import {
   Tabs,
 } from 'src/constants';
 import {
-  createOrUpdateSavedWords,
-  getDefinition,
   getSavedWords,
   moveItemFromOrToMasteredMap,
   removeSavedWordFromStorage,
@@ -26,7 +23,6 @@ const Words = ({
     React.SetStateAction<{ [Tabs.words]: number; [Tabs.mastered]: number }>
   >;
 }) => {
-  const wordInput = useRef<HTMLInputElement>(null);
   const [wordsWithDefinitionsMap, setWordsWithDefinitionsMap] =
     useState<LocalStorageData>({});
   const [masteredWordsWithDefinitionsMap, setMasteredWordsWithDefinitionsMap] =
@@ -34,7 +30,6 @@ const Words = ({
   const [wordsMarkedAsMastered, setWordsMarkedAsMastered] = useState<
     Map<string, boolean>
   >(new Map());
-  const isOnNewWordsPage = currentTab === Tabs.words;
   const isOnMasteredWordsPage = currentTab === Tabs.mastered;
   const currentPageItems = isOnMasteredWordsPage
     ? Object.values(masteredWordsWithDefinitionsMap)
@@ -61,25 +56,6 @@ const Words = ({
       [Tabs.mastered]: Object.keys(masteredWordsWithDefinitionsMap).length,
     });
   }, [wordsWithDefinitionsMap, masteredWordsWithDefinitionsMap, setWordsCount]);
-
-  const getWordDefinition = async () => {
-    const word = wordInput.current?.value;
-    if (!word) {
-      return;
-    }
-    const definition = await getDefinition(word);
-    const cleanedDefinitionData = cleanDefinitionData(definition);
-    if (!cleanedDefinitionData) {
-      return;
-    }
-
-    setWordsWithDefinitionsMap((prevMap) => {
-      const newData = { ...prevMap };
-      newData[word] = cleanedDefinitionData;
-      return newData;
-    });
-    createOrUpdateSavedWords(cleanedDefinitionData);
-  };
 
   const onRemoveWord = (word: string) => {
     setWordsWithDefinitionsMap((prev) => {
@@ -124,16 +100,7 @@ const Words = ({
 
   return (
     <div className="wordsSection">
-      {isOnNewWordsPage && (
-        <div className="wordButton">
-          <input className="wordInput" ref={wordInput} />
-          <button className="addWordButton" onClick={getWordDefinition}>
-            Get Word
-          </button>
-        </div>
-      )}
       {isPageEmpty && <EmptyState />}
-
       {Array.from(currentPageItems)
         .reverse()
         .map((definition, index) => (

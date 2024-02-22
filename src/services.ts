@@ -1,20 +1,8 @@
 import {
-  freeDictionaryApiUrl,
   localStorageSavedWordsKey,
   localStorageMsteredWordsKey,
 } from './constants';
-import {
-  CleanWordDefinition,
-  LocalStorageData,
-  localStorageKeyType,
-} from './types';
-
-export const getDefinition = async (word: string) => {
-  const definition = await fetch(`${freeDictionaryApiUrl}${word}`).then(
-    (response) => response.json()
-  );
-  return definition;
-};
+import { LocalStorageData, localStorageKeyType } from './types';
 
 export const getSavedWords = (
   key: localStorageKeyType
@@ -28,18 +16,6 @@ export const getSavedWords = (
       }
     });
   });
-};
-
-export const createOrUpdateSavedWords = async (
-  newItem: CleanWordDefinition
-) => {
-  const localStorageData = await getSavedWords(localStorageSavedWordsKey);
-  const masteredStorageData = await getSavedWords(localStorageMsteredWordsKey);
-  if (masteredStorageData[newItem.word] || localStorageData[newItem.word]) {
-    return;
-  }
-  localStorageData[newItem.word] = newItem;
-  chrome.storage.local.set({ [localStorageSavedWordsKey]: localStorageData });
 };
 
 export const deleteFromSavedWords = async (key: localStorageKeyType) => {
