@@ -31,7 +31,6 @@ function App() {
     sortingName: SortKeyType,
     sortingType: SortTypeType
   ) => {
-    console.log(sortingName, sortingType);
     setSettings({
       sortKey: sortingName,
       sortType: sortingType,

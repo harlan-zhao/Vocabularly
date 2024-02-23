@@ -2,6 +2,7 @@ import './Settings.css';
 import { SortKeyType, SortTypeType, SettingsData } from 'src/types';
 import { sortKeys, sortTypes } from 'src/constants';
 import React, { useState, useEffect } from 'react';
+import GitHubButton from 'react-github-btn';
 
 interface SortingOptionsProps {
   onSortingChange: (
@@ -25,72 +26,85 @@ const Settings: React.FC<SortingOptionsProps> = ({
     setSortingType(settings.sortType);
   }, [settings]);
 
-  const handleSortingKeyChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = event.target.value;
+  const handleSortingKeyChange = (value: SortKeyType) => {
     if (value !== sortKeys.date && value !== sortKeys.alpha) return;
     setSortingKey(value);
     onSortingChange(value, sortingType);
   };
 
-  const handleSortingTypeChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = event.target.value;
+  const handleSortingTypeChange = (value: SortTypeType) => {
     if (value !== sortTypes.asc && value !== sortTypes.desc) return;
     setSortingType(value);
     onSortingChange(sortingKey, value);
   };
 
   return (
-    <div>
-      <div className="sort-section">
-        <h3>Sort By</h3>
-        <label>
-          <input
-            type="radio"
-            name="sortingName"
-            value={sortKeys.date}
-            checked={sortingKey === sortKeys.date}
-            onChange={handleSortingKeyChange}
-          />{' '}
-          Date
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="sortingName"
-            value={sortKeys.alpha}
-            checked={sortingKey === sortKeys.alpha}
-            onChange={handleSortingKeyChange}
-          />
-          Alphabetical
-        </label>
+    <div className="mainContainer">
+      <div className="container">
+        <span className="optionTitle">Sort Words By</span>
+        <form>
+          <div className="sortKeyGroup">
+            <label className="radioLabel">
+              <input
+                type="radio"
+                name="radio"
+                checked={sortingKey === sortKeys.alpha}
+              />
+              <span onClick={() => handleSortingKeyChange(sortKeys.alpha)}>
+                Alphabet
+              </span>
+            </label>
+            <label className="radioLabel dateLabel">
+              <input
+                type="radio"
+                name="radio"
+                checked={sortingKey === sortKeys.date}
+              />
+              <span onClick={() => handleSortingKeyChange(sortKeys.date)}>
+                Creation Date
+              </span>
+            </label>
+          </div>
+        </form>
       </div>
-
-      <div className="sort-section">
-        <h3>Sort Order</h3>
-        <label>
-          <input
-            type="radio"
-            name="sortingType"
-            value="asc"
-            checked={sortingType === 'asc'}
-            onChange={handleSortingTypeChange}
-          />
-          Ascending
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="sortingType"
-            value={sortTypes.desc}
-            checked={sortingType === sortTypes.desc}
-            onChange={handleSortingTypeChange}
-          />{' '}
-          Descending
-        </label>
+      <div className="container">
+        <span className="optionTitle">Sort Order</span>
+        <form>
+          <div className="sortKeyGroup">
+            <label className="radioLabel">
+              <input
+                type="radio"
+                name="radio"
+                checked={sortingType === sortTypes.asc}
+              />
+              <span onClick={() => handleSortingTypeChange(sortTypes.asc)}>
+                {sortingKey === sortKeys.alpha ? 'A-Z' : 'Oldest to Newest'}
+              </span>
+            </label>
+            <label className="radioLabel dateLabel">
+              <input
+                type="radio"
+                name="radio"
+                checked={sortingType === sortTypes.desc}
+              />
+              <span onClick={() => handleSortingTypeChange(sortTypes.desc)}>
+                {sortingKey === sortKeys.date ? 'Newest to Oldest' : 'Z-A'}
+              </span>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div className="settingsGithub">
+        <GitHubButton
+          href="https://github.com/harlan-zhao/Vocabularly"
+          data-color-scheme="no-preference: light; light: light; dark: dark;"
+          data-icon="octicon-star"
+          data-size="large"
+          data-show-count="true"
+          aria-label="Star harlan-zhao/Vocabularly on GitHub"
+        >
+          Star on GitHub
+        </GitHubButton>
       </div>
     </div>
   );

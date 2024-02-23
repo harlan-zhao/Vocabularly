@@ -32,7 +32,6 @@ const Words = ({
   >;
   settings: SettingsData;
 }) => {
-  console.log(settings);
   const [wordsWithDefinitionsMap, setWordsWithDefinitionsMap] =
     useState<LocalStorageData>({});
   const [masteredWordsWithDefinitionsMap, setMasteredWordsWithDefinitionsMap] =
@@ -55,11 +54,11 @@ const Words = ({
 
     if (settings.sortKey === sortKeys.date) {
       items = items.sort((a, b) => {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+        return new Date(b.date!).getTime() - new Date(a.date!).getTime();
       });
     }
     if (settings.sortKey === sortKeys.alpha) {
-      items = items.sort((a, b) => a.word.localeCompare(b.word));
+      items = items.sort((a, b) => a?.word?.localeCompare(b.word!));
     }
 
     if (settings.sortType === sortTypes.desc) {
