@@ -78,7 +78,7 @@ const Settings: React.FC<SortingOptionsProps> = ({
                 checked={sortingType === sortTypes.asc}
               />
               <span onClick={() => handleSortingTypeChange(sortTypes.asc)}>
-                {sortingKey === sortKeys.alpha ? 'A-Z' : 'Oldest to Newest'}
+                {sortingKey === sortKeys.alpha ? 'A-Z' : 'Newest to Oldest'}
               </span>
             </label>
             <label className="radioLabel dateLabel">
@@ -88,7 +88,7 @@ const Settings: React.FC<SortingOptionsProps> = ({
                 checked={sortingType === sortTypes.desc}
               />
               <span onClick={() => handleSortingTypeChange(sortTypes.desc)}>
-                {sortingKey === sortKeys.date ? 'Newest to Oldest' : 'Z-A'}
+                {sortingKey === sortKeys.date ? 'Oldest to Newest' : 'Z-A'}
               </span>
             </label>
           </div>
