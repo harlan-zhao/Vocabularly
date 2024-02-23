@@ -1,30 +1,49 @@
-# React + TypeScript + Vite
+# Vocabularly
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the source code for the **Vocabularly** chrome extension project.
 
-Currently, two official plugins are available:
+## Introduction
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Vocabularly** is a free chrome Extension aimed at providing a platform for learning new words and expanding your vocabulary. It utilizes modern web technologies and frameworks to create an interactive and user-friendly experience.
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To run this project locally, follow these steps:
 
-- Configure the top-level `parserOptions` property like this:
+1. Clone the repository to your local machine:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```bash
+git clone <https://github.com/harlan-zhao/Vocabularly.git>
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Navigate to the project directory:
+
+```bash
+cd vocabularly
+```
+
+3. Install the dependencies:
+
+```bash
+npm install
+```
+
+## Usage
+
+After installing the dependencies, you can use the following npm scripts:
+
+- **dev**: Run the development server using Vite.
+- **build**: Build the project for production.
+- **lint**: Lint the project using ESLint.
+- **preview**: Preview the production build locally.
+
+## Development Dependencies
+
+The project utilizes the following development dependencies:
+
+- **typescript**: A superset of JavaScript that compiles to clean JavaScript output.
+- **vite**: A build tool that aims to provide a faster and more efficient development experience.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
