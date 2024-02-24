@@ -4,7 +4,8 @@
   "version": "1.0",
   "description": "This extension will help you to save and learn new english words",
   "icons": {
-    "32": "/assets/vocabulary.png"
+    "32": "/assets/vocabulary.png",
+    "48": "/assets/vocabulary.png"
   },
   "permissions": ["scripting", "storage", "activeTab"],
   "background": {
