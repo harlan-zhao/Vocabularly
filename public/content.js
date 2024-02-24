@@ -7,7 +7,7 @@ let currentWindowText = null;
 const link = document.createElement('link');
 link.rel = 'stylesheet';
 link.type = 'text/css';
-link.href = chrome.runtime.getURL('content.css'); // Path to your CSS file
+link.href = chrome.runtime.getURL('content.css');
 (document.head || document.documentElement).appendChild(link);
 
 function debounce(func, delay) {
@@ -49,8 +49,7 @@ async function createWindow(rect) {
   }
   let definition = null;
   let isWordInStorage = false;
-  const wordInStorage = await checkIfWordInStorage(selectedText);
-
+  const wordInStorage = await checkIfWordInStorage(selectedText.toLowerCase());
   if (wordInStorage) {
     definition = wordInStorage;
     isWordInStorage = true;
@@ -61,7 +60,7 @@ async function createWindow(rect) {
   }
 
   windowDiv = document.createElement('div');
-  windowDiv.classList.add('window'); // Apply the CSS class
+  windowDiv.classList.add('window');
   windowDiv.style.userSelect = 'none';
   windowDiv.style.left = `${rect.left + window.pageXOffset}px`;
   windowDiv.style.top = `${rect.bottom - 20 + window.pageYOffset}px`;
@@ -279,7 +278,6 @@ const getValidPronounciation = (definition) => {
 const checkIfWordInStorage = async (word) => {
   const localStorageData = await getSavedWords('wordsList');
   const masteredStorageData = await getSavedWords('masteredwordsList');
-
   if (!masteredStorageData[word] && !localStorageData[word]) {
     return false;
   } else {
@@ -301,7 +299,7 @@ const getSavedWords = (key) => {
 
 const saveWordToStorage = async (definition) => {
   const localStorageData = await getSavedWords('wordsList');
-  localStorageData[definition.word] = {
+  localStorageData[definition.word.toLowerCase()] = {
     ...definition,
     date: new Date().toISOString(),
   };
@@ -310,6 +308,6 @@ const saveWordToStorage = async (definition) => {
 
 const removeWordFromStorage = async (word) => {
   const localStorageData = await getSavedWords('wordsList');
-  delete localStorageData[word];
+  delete localStorageData[word.toLowerCase()];
   chrome.storage.local.set({ wordsList: localStorageData });
 };
