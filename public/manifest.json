@@ -7,7 +7,7 @@
     "32": "/assets/vocabulary.png",
     "48": "/assets/vocabulary.png"
   },
-  "permissions": ["scripting", "storage", "activeTab"],
+  "permissions": ["storage"],
   "background": {
     "service_worker": "service-worker.js",
     "type": "module"
