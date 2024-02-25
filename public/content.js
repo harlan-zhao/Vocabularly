@@ -1,4 +1,4 @@
-let debounceTimer;
+let debounceTimer = null;
 let button = null;
 let windowDiv = null;
 let selectedText = null;

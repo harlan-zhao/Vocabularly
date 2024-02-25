@@ -7,7 +7,7 @@
     "32": "/assets/vocabulary.png",
     "48": "/assets/vocabulary.png"
   },
-  "permissions": ["storage"],
+  "permissions": ["storage", "scripting"],
   "background": {
     "service_worker": "service-worker.js",
     "type": "module"
@@ -17,13 +17,6 @@
     "default_icon": "/assets/vocabulary.png"
   },
   "host_permissions": ["https://*/*", "http://*/*"],
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "type": "module"
-    }
-  ],
   "web_accessible_resources": [
     {
       "resources": ["content.css", "/assets/*", "service.js"],
