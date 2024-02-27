@@ -51,13 +51,6 @@ After installing the dependencies, you can use the following npm scripts:
   2.  Run `npm run build`
   3.  Load your `/dist` (`/dist` folder will appear at project's root after running `npm run build` ) as as an [unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked 'unpacked extension')
 
-## Development Dependencies
-
-The project utilizes the following development dependencies:
-
-- **typescript**: A superset of JavaScript that compiles to clean JavaScript output.
-- **vite**: A build tool that aims to provide a faster and more efficient development experience.
-
 ## Thanks
 
 A huge thanks to [DictionaryAPI.dev](https://dictionaryapi.dev/) for providing a free API service for fetching word definitions. Their API has been integral to the functionality of this project, allowing users to effortlessly access accurate definitions and enrich their experience.
