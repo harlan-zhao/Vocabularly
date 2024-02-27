@@ -28,7 +28,7 @@ cd vocabularly
 npm install
 ```
 
-## Usage
+## Scripts
 
 After installing the dependencies, you can use the following npm scripts:
 
@@ -36,6 +36,14 @@ After installing the dependencies, you can use the following npm scripts:
 - **build**: Build the project for production.
 - **lint**: Lint the project using ESLint.
 - **preview**: Preview the production build locally.
+
+## Load this chrome extension
+
+- **Option One**: Install the extension from official google extensions store: https://chromewebstore.google.com/detail/vocabularly/gidmmcjapjgamldfiealojihhfeeeajg
+- **Option Two**:  Build project locally and load unpacked package in chrome browser(developer mode): 
+   1.  Run `npm install`
+   2. Run `npm run build`
+   3. Load your `/dist` (`/dist` folder will appear at project's root after running  `npm run build` ) as as an [unpacked extension](http:https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked// "unpacked extension").
 
 ## Development Dependencies
 
@@ -47,3 +55,4 @@ The project utilizes the following development dependencies:
 ## License
 
 This project is licensed under the Apache License - see the [LICENSE](LICENSE) file for details.
+icon
