@@ -39,11 +39,11 @@ After installing the dependencies, you can use the following npm scripts:
 
 ## Load this chrome extension
 
-- **Option One**: Install the extension from official google extensions store: https://chromewebstore.google.com/detail/vocabularly/gidmmcjapjgamldfiealojihhfeeeajg
+- **Option One**: Install the extension from official[ google extensions store](https://chromewebstore.google.com/detail/vocabularly/gidmmcjapjgamldfiealojihhfeeeajg " google extensions store"): 
 - **Option Two**:  Build project locally and load unpacked package in chrome browser(developer mode): 
    1.  Run `npm install`
    2. Run `npm run build`
-   3. Load your `/dist` (`/dist` folder will appear at project's root after running  `npm run build` ) as as an [unpacked extension](http:https://developer.chrome.com/docs/extensions/get-started/tutorial/hello-world#load-unpacked// "unpacked extension").
+   3. Load your `/dist` (`/dist` folder will appear at project's root after running  `npm run build` ) as as an [unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked "unpacked extension")
 
 ## Development Dependencies
 
